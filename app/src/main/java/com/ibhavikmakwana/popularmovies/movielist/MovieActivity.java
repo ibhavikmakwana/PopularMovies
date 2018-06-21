@@ -1,11 +1,13 @@
 package com.ibhavikmakwana.popularmovies.movielist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import android.widget.ViewFlipper;
 
 import com.ibhavikmakwana.popularmovies.R;
 import com.ibhavikmakwana.popularmovies.base.BaseActivity;
+import com.ibhavikmakwana.popularmovies.base.RippleBackground;
 import com.ibhavikmakwana.popularmovies.model.Movies;
 import com.ibhavikmakwana.popularmovies.network.RetrofitHelper;
 import com.ibhavikmakwana.popularmovies.repository.MoviesRepository;
@@ -48,6 +51,11 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.cc_error)
     ConstraintLayout mCcError;
     boolean isLoading = false;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.load_more_rb)
+    RippleBackground mLoadMoreRb;
+
     private boolean isPopular = true;
     private PopularMovieAdapter mPopularMovieAdapter;
     private List<Movies.Result> mPopularMoviesList;
@@ -57,6 +65,33 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
     private MoviesRepository mMoviesRepository;
     private int popularPage = 1;
     private int topRatedPage = 1;
+    private GridLayoutManager mLayoutManager;
+    private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = mLayoutManager.getChildCount();
+            int totalItemCount = mLayoutManager.getItemCount();
+            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+
+            /*TODO 1: Add Pagination
+
+             * */
+        }
+    };
+
+    /**
+     * Call this method to launch the activity.
+     */
+    public static void launchActivity(Context context) {
+        Intent intent = new Intent(context, MovieActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +99,8 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_movie);
         mContext = MovieActivity.this;
         setToolbar(R.id.toolbar, getResources().getString(R.string.app_name), false);
+        mLoadMoreRb.startRippleAnimation();
+        mToolbar.setOverflowIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_sort_24dp));
         mMoviesRepository = new MoviesRepository(RetrofitHelper.create(), mContext);
         setUpPopularMovie();
         getPopularMovies(getResources().getString(R.string.api_key), popularPage);
@@ -78,7 +115,9 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
         mPopularMoviesList = new ArrayList<>();
         mPopularMovieAdapter = new PopularMovieAdapter(mPopularMoviesList, mContext);
         mRvMovies.setAdapter(mPopularMovieAdapter);
-        mRvMovies.setLayoutManager(new GridLayoutManager(mContext, 2));
+        mLayoutManager = new GridLayoutManager(mContext, 2);
+        mRvMovies.setLayoutManager(mLayoutManager);
+        mRvMovies.addOnScrollListener(recyclerViewOnScrollListener);
     }
 
     /**
@@ -126,6 +165,7 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
 
     /**
      * Click Listener for the views
+     *
      * @param v
      */
     @Override
@@ -191,6 +231,7 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
                 mPopularMoviesList.addAll(movies.getResults());
                 Log.d(TAG, mPopularMoviesList.toString());
                 mPopularMovieAdapter.setMovies(mPopularMoviesList);
+
             }
 
             @Override

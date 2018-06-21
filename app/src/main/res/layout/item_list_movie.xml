@@ -7,8 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="16dp"
     android:background="?attr/selectableItemBackgroundBorderless"
+    app:cardCornerRadius="16dp"
     app:cardElevation="16dp">
 
     <android.support.constraint.ConstraintLayout
@@ -31,7 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/pic"/>
+                android:src="@drawable/placeholder"
+                android:transitionName="@string/poster_image"/>
         </android.support.v7.widget.CardView>
 
         <TextView
@@ -57,9 +58,8 @@
             android:numStars="5"
             android:rating="5"
             android:stepSize="0.5"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_movie_name"/>
-
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

@@ -1,5 +1,6 @@
 package com.ibhavikmakwana.popularmovies.network;
 
+import com.ibhavikmakwana.popularmovies.model.Detail;
 import com.ibhavikmakwana.popularmovies.model.Movies;
 
 import io.reactivex.Observable;
@@ -21,6 +22,6 @@ public interface APIService {
                                          @Query("page") int page);
 
     @GET("movie/{movie_id}")
-    Observable<Movies> getMovieDetail(@Query("api_key") String apiKey,
-                                      @Path("movie_id") int movieId);
+    Observable<Detail> getMovieDetail(@Path("movie_id") int movieId,
+                                      @Query("api_key") String apiKey);
 }

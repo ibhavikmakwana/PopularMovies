@@ -13,7 +13,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.request.RequestOptions;
 import com.ibhavikmakwana.popularmovies.R;
 import com.ibhavikmakwana.popularmovies.base.BaseRecyclerViewAdapter;
 import com.ibhavikmakwana.popularmovies.model.Movies;
@@ -35,13 +35,17 @@ public class PopularMovieAdapter extends BaseRecyclerViewAdapter<PopularMovieAda
         mContext = context;
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "CheckResult"})
     @Override
     public void bindView(ViewHolder holder, int position) {
         Movies.Result movies = mPopularMoviesList.get(position);
         holder.mTvMovieName.setText(movies.getOriginalTitle());
         holder.mRbMovieRating.setRating((float) (movies.getVoteAverage() / 2));
-        Glide.with(mContext).load(new GlideUrl(Constant.POSTER_BASE_URL + movies.getPosterPath())).into(holder.mIvMoviePoster);
+
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.drawable.placeholder);
+        requestOptions.error(R.drawable.placeholder);
+        Glide.with(mContext).setDefaultRequestOptions(requestOptions).load(Constant.POSTER_BASE_URL + movies.getPosterPath()).into(holder.mIvMoviePoster);
     }
 
     @NonNull
@@ -76,7 +80,7 @@ public class PopularMovieAdapter extends BaseRecyclerViewAdapter<PopularMovieAda
                 @Override
                 public void onClick(View v) {
                     int movieId = getItem(getLayoutPosition()).getId();
-                    MovieDetailActivity.launchActivity(mContext, movieId);
+                    MovieDetailActivity.launchActivity(mContext, movieId, mIvMoviePoster);
                 }
             });
         }

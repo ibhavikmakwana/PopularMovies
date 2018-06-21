@@ -3,6 +3,7 @@ package com.ibhavikmakwana.popularmovies.repository;
 import android.content.Context;
 import android.util.Log;
 
+import com.ibhavikmakwana.popularmovies.model.Detail;
 import com.ibhavikmakwana.popularmovies.model.Movies;
 import com.ibhavikmakwana.popularmovies.network.APIService;
 
@@ -30,6 +31,10 @@ public class MoviesRepository {
         return Observable.concatArray(getTopRatedMoviesFromApi(apiKey, page));
     }
 
+    public Observable<Detail> getMoviesDetail(String apiKey, int id) {
+        return Observable.concatArray(getMovieDetailFromApi(apiKey, id));
+    }
+
     private Observable<Movies> getPopularMoviesFromApi(String apiKey, int page) {
         return mAPIService.getPopularMovies(apiKey, page).doOnNext(new Consumer<Movies>() {
             @Override
@@ -44,6 +49,16 @@ public class MoviesRepository {
             @Override
             public void accept(Movies movies) {
                 Log.d("Success", "Dispatching " + movies + "characters from API...");
+            }
+        });
+    }
+
+
+    private Observable<Detail> getMovieDetailFromApi(String apiKey, int id) {
+        return mAPIService.getMovieDetail(id,apiKey).doOnNext(new Consumer<Detail>() {
+            @Override
+            public void accept(Detail detail) {
+                Log.d("Success", "Dispatching " + detail + "characters from API...");
             }
         });
     }

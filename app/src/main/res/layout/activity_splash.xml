@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ibhavikmakwana.popularmovies.base.RippleBackground
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:rb_color="#2798FF"
+    app:rb_duration="5000"
+    app:rb_radius="32dp"
+    app:rb_rippleAmount="4"
+    app:rb_scale="4"
+    tools:context=".SplashActivity">
+
+    <ImageView
+        android:id="@+id/centerImage"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"/>
+</com.ibhavikmakwana.popularmovies.base.RippleBackground>
