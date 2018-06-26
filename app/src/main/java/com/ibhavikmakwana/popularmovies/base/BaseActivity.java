@@ -88,6 +88,7 @@ public class BaseActivity extends AppCompatActivity {
 
         //Set the up indicator
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(showUpButton);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
         getSupportActionBar().setHomeButtonEnabled(showUpButton);
         getSupportActionBar().setDisplayHomeAsUpEnabled(showUpButton);
     }

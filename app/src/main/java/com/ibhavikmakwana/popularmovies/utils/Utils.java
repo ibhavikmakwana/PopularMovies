@@ -23,7 +23,10 @@ public class Utils {
      */
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        NetworkInfo netInfo = null;
+        if (cm != null) {
+            netInfo = cm.getActiveNetworkInfo();
+        }
         return netInfo != null && netInfo.isConnected();
     }
 

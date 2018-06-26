@@ -50,7 +50,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(VH holder, int position) {
+    public void onBindViewHolder(@NonNull VH holder, int position) {
         //notify on pag complete
         if (mListener != null
                 && position == mCollection.size() - 1

@@ -18,9 +18,8 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="460dp"
+            android:layout_height="@dimen/app_bar_height"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="false"
             android:stateListAnimator="@null">
@@ -32,7 +31,6 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <android.support.constraint.ConstraintLayout
@@ -44,9 +42,9 @@
                     android:id="@+id/tv_movie_detail_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/spacing_xs_large"
+                    android:layout_marginStart="@dimen/spacing_xs_large"
+                    android:layout_marginTop="@dimen/spacing_xs_large"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
@@ -59,9 +57,9 @@
                     android:id="@+id/tv_movie_detail_tag_line"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/spacing_xs_large"
+                    android:layout_marginStart="@dimen/spacing_xs_large"
+                    android:layout_marginTop="@dimen/spacing_normal"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
@@ -74,8 +72,8 @@
                     android:id="@+id/tv_movie_detail_language"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_normal"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -87,7 +85,7 @@
                     android:id="@+id/hsv_genres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
                     android:fillViewport="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -97,21 +95,20 @@
                         android:id="@+id/ll_genre_chip_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingBottom="4dp"
-                        android:paddingEnd="16dp"
-                        android:paddingStart="16dp"
-                        android:paddingTop="4dp"/>
+                        android:paddingBottom="@dimen/spacing_micro"
+                        android:paddingEnd="@dimen/spacing_xs_large"
+                        android:paddingStart="@dimen/spacing_xs_large"
+                        android:paddingTop="@dimen/spacing_micro"/>
                 </HorizontalScrollView>
 
                 <TextView
                     android:id="@+id/tv_movie_released_on_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/spacing_xs_large"
+                    android:layout_marginStart="@dimen/spacing_xs_large"
+                    android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@string/text_released_on"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -123,9 +120,9 @@
                     android:id="@+id/tv_movie_released_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/spacing_xs_large"
+                    android:layout_marginStart="@dimen/spacing_xs_large"
+                    android:layout_marginTop="@dimen/spacing_normal"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_movie_released_on_label"
@@ -136,7 +133,7 @@
                     style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
+                    android:layout_marginStart="@dimen/spacing_large"
                     android:numStars="5"
                     android:rating="5"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_movie_released_date"
@@ -145,12 +142,13 @@
 
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/card_overview"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    app:cardElevation="8dp"
+                    android:layout_marginEnd="@dimen/spacing_xs_large"
+                    android:layout_marginStart="@dimen/spacing_xs_large"
+                    android:layout_marginTop="@dimen/spacing_xs_large"
+                    app:cardElevation="@dimen/spacing_normal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar">
@@ -164,9 +162,9 @@
                             android:id="@+id/tv_overview_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="@dimen/spacing_xs_large"
+                            android:layout_marginStart="@dimen/spacing_xs_large"
+                            android:layout_marginTop="@dimen/spacing_xs_large"
                             android:text="@string/text_overview"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -177,10 +175,10 @@
                             android:id="@+id/tv_movie_detail_overview"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="@dimen/spacing_xs_large"
+                            android:layout_marginEnd="@dimen/spacing_xs_large"
+                            android:layout_marginStart="@dimen/spacing_xs_large"
+                            android:layout_marginTop="@dimen/spacing_normal"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -188,6 +186,33 @@
                             tools:text="@tools:sample/lorem/random"/>
                     </android.support.constraint.ConstraintLayout>
                 </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tv_label_videos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/spacing_xs_large"
+                    android:layout_marginStart="@dimen/spacing_xs_large"
+                    android:layout_marginTop="@dimen/spacing_xs_large"
+                    android:text="@string/text_videos"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/card_overview"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_movie_video"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/spacing_xs_large"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_videos"/>
             </android.support.constraint.ConstraintLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>

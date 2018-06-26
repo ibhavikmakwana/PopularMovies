@@ -18,7 +18,6 @@ import android.widget.ViewFlipper;
 
 import com.ibhavikmakwana.popularmovies.R;
 import com.ibhavikmakwana.popularmovies.base.BaseActivity;
-import com.ibhavikmakwana.popularmovies.base.RippleBackground;
 import com.ibhavikmakwana.popularmovies.model.Movies;
 import com.ibhavikmakwana.popularmovies.network.RetrofitHelper;
 import com.ibhavikmakwana.popularmovies.repository.MoviesRepository;
@@ -53,11 +52,9 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
     boolean isLoading = false;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.load_more_rb)
-    RippleBackground mLoadMoreRb;
-
     private boolean isPopular = true;
-    private PopularMovieAdapter mPopularMovieAdapter;
+    private PopularMovieListAdapter mPopularMovieListAdapter;
+    private TopRatedMovieListAdapter mTopRatedMovieListAdapter;
     private List<Movies.Result> mPopularMoviesList;
     private List<Movies.Result> mTopMoviesList;
     private MovieViewModel mMovieViewModel;
@@ -65,7 +62,10 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
     private MoviesRepository mMoviesRepository;
     private int popularPage = 1;
     private int topRatedPage = 1;
+    private int totalPopularPage;
+    private int totalTopRatedPage;
     private GridLayoutManager mLayoutManager;
+
     private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -79,9 +79,25 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
             int totalItemCount = mLayoutManager.getItemCount();
             int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
 
-            /*TODO 1: Add Pagination
-
-             * */
+            if (!isLoading) {
+                if (isPopular) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && totalPopularPage >= totalItemCount) {
+                        popularPage++;
+                        isLoading = true;
+                        getPopularMovies(getResources().getString(R.string.api_key), popularPage);
+                    }
+                } else {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && totalTopRatedPage >= totalItemCount) {
+                        topRatedPage++;
+                        isLoading = true;
+                        getTopRatedMovies(getResources().getString(R.string.api_key), topRatedPage);
+                    }
+                }
+            }
         }
     };
 
@@ -99,7 +115,6 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_movie);
         mContext = MovieActivity.this;
         setToolbar(R.id.toolbar, getResources().getString(R.string.app_name), false);
-        mLoadMoreRb.startRippleAnimation();
         mToolbar.setOverflowIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_sort_24dp));
         mMoviesRepository = new MoviesRepository(RetrofitHelper.create(), mContext);
         setUpPopularMovie();
@@ -113,8 +128,11 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
     private void setUpPopularMovie() {
         mMovieViewModel = new MovieViewModel(mMoviesRepository);
         mPopularMoviesList = new ArrayList<>();
-        mPopularMovieAdapter = new PopularMovieAdapter(mPopularMoviesList, mContext);
-        mRvMovies.setAdapter(mPopularMovieAdapter);
+        mTopMoviesList = new ArrayList<>();
+
+        mPopularMovieListAdapter = new PopularMovieListAdapter(mPopularMoviesList, mContext);
+        mTopRatedMovieListAdapter = new TopRatedMovieListAdapter(mTopMoviesList, mContext);
+
         mLayoutManager = new GridLayoutManager(mContext, 2);
         mRvMovies.setLayoutManager(mLayoutManager);
         mRvMovies.addOnScrollListener(recyclerViewOnScrollListener);
@@ -126,8 +144,10 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
      * @param apiKey
      * @param page
      */
-    private void getPopularMovies(String apiKey, int page) {
-        mViewFlipper.setDisplayedChild(0);
+    private void getPopularMovies(String apiKey, final int page) {
+        if (page == 1 && mPopularMoviesList.size() <= 0)
+            mViewFlipper.setDisplayedChild(0);
+
         mMovieViewModel.getPopularMovies(apiKey, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Movies>() {
@@ -138,21 +158,93 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onNext(Movies movies) {
+                isLoading = false;
                 mViewFlipper.setDisplayedChild(1);
-                mPopularMoviesList.addAll(movies.getResults());
-                Log.d(TAG, mPopularMoviesList.toString());
-                mPopularMovieAdapter.setMovies(mPopularMoviesList);
+                if (page == 1) {
+                    mPopularMoviesList.clear();
+                    mPopularMoviesList.addAll(movies.getResults());
+                    mRvMovies.setAdapter(mPopularMovieListAdapter);
+                } else {
+                    mPopularMoviesList.addAll(movies.getResults());
+                }
+                mPopularMovieListAdapter.setMovies(mPopularMoviesList);
+                totalPopularPage = movies.getTotalPages();
             }
 
             @Override
             public void onError(Throwable e) {
-                mViewFlipper.setDisplayedChild(2);
+                isLoading = false;
                 if (e instanceof UnknownHostException) {
-                    mIvError.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_signal_wifi_off_black_24dp));
-                    mTvErrorMsg.setText(ERROR_MESSAGE_INTERNET_NOT_AVAILABLE);
+                    if (mPopularMoviesList.size() > 0) {
+                        mPopularMovieListAdapter.setMovies(mPopularMoviesList);
+                    } else {
+                        mViewFlipper.setDisplayedChild(2);
+                        mIvError.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_signal_wifi_off_black_24dp));
+                        mTvErrorMsg.setText(ERROR_MESSAGE_INTERNET_NOT_AVAILABLE);
+                    }
+                } else {
+                    mViewFlipper.setDisplayedChild(2);
+                    mIvError.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_warning_black_24dp));
+                    mTvErrorMsg.setText(SOMETHING_WENT_WRONG);
+                }
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e(TAG, "Completed");
+            }
+        });
+    }
+
+    /**
+     * Get the top rated movies from the server
+     *
+     * @param apiKey
+     * @param page
+     */
+    private void getTopRatedMovies(String apiKey, final int page) {
+        if (page == 1 && mTopMoviesList.size() <= 0)
+            mViewFlipper.setDisplayedChild(0);
+
+        mMovieViewModel.getTopRatedMovies(apiKey, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Movies>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                addSubscription(d);
+            }
+
+            @Override
+            public void onNext(Movies movies) {
+                isLoading = false;
+                mViewFlipper.setDisplayedChild(1);
+                if (page == 1) {
+                    mTopMoviesList.clear();
+                    mTopMoviesList.addAll(movies.getResults());
+                    mRvMovies.setAdapter(mTopRatedMovieListAdapter);
+                } else {
+                    mTopMoviesList.addAll(movies.getResults());
+                }
+                mPopularMovieListAdapter.setMovies(mTopMoviesList);
+                mTopRatedMovieListAdapter.setMovies(mTopMoviesList);
+                totalTopRatedPage = movies.getTotalPages();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                isLoading = false;
+                if (e instanceof UnknownHostException) {
+                    if (mTopMoviesList.size() > 0) {
+                        mPopularMovieListAdapter.setMovies(mTopMoviesList);
+                    } else {
+                        mViewFlipper.setDisplayedChild(2);
+                        mIvError.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_signal_wifi_off_black_24dp));
+                        mTvErrorMsg.setText(ERROR_MESSAGE_INTERNET_NOT_AVAILABLE);
+                    }
                 } else {
                     mIvError.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_warning_black_24dp));
                     mTvErrorMsg.setText(SOMETHING_WENT_WRONG);
+                    mViewFlipper.setDisplayedChild(2);
                 }
             }
 
@@ -172,11 +264,26 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cc_error:
-                if (isPopular)
-                    getPopularMovies(getResources().getString(R.string.api_key), popularPage);
-                else
-                    getTopRatedMovies(getResources().getString(R.string.api_key), popularPage);
+                sortAndReloadMovieList();
                 break;
+        }
+    }
+
+    private void sortAndReloadMovieList() {
+        if (isPopular) {
+            if (mPopularMoviesList.size() > 0) {
+                mRvMovies.setAdapter(mPopularMovieListAdapter);
+                mViewFlipper.setDisplayedChild(1);
+            } else {
+                getPopularMovies(getResources().getString(R.string.api_key), popularPage);
+            }
+        } else {
+            if (mTopMoviesList.size() > 0) {
+                mRvMovies.setAdapter(mTopRatedMovieListAdapter);
+                mViewFlipper.setDisplayedChild(1);
+            } else {
+                getTopRatedMovies(getResources().getString(R.string.api_key), topRatedPage);
+            }
         }
     }
 
@@ -193,63 +300,19 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
                 if (!isPopular) {
                     item.setChecked(true);
                     isPopular = true;
-                    getPopularMovies(getResources().getString(R.string.api_key), popularPage);
+                    sortAndReloadMovieList();
                 }
                 break;
             case R.id.action_sort_top_rated:
                 if (isPopular) {
                     item.setChecked(true);
                     isPopular = false;
-                    getTopRatedMovies(getResources().getString(R.string.api_key), topRatedPage);
+                    sortAndReloadMovieList();
                 }
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
-    }
-
-    /**
-     * Get the top rated movies from the server
-     *
-     * @param apiKey
-     * @param page
-     */
-    private void getTopRatedMovies(String apiKey, int page) {
-        mViewFlipper.setDisplayedChild(0);
-        mMovieViewModel.getTopRatedMovies(apiKey, page)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Movies>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                addSubscription(d);
-            }
-
-            @Override
-            public void onNext(Movies movies) {
-                mViewFlipper.setDisplayedChild(1);
-                mPopularMoviesList.addAll(movies.getResults());
-                Log.d(TAG, mPopularMoviesList.toString());
-                mPopularMovieAdapter.setMovies(mPopularMoviesList);
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                mViewFlipper.setDisplayedChild(2);
-                if (e instanceof UnknownHostException) {
-                    mIvError.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_signal_wifi_off_black_24dp));
-                    mTvErrorMsg.setText(ERROR_MESSAGE_INTERNET_NOT_AVAILABLE);
-                } else {
-                    mIvError.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_warning_black_24dp));
-                    mTvErrorMsg.setText(SOMETHING_WENT_WRONG);
-                }
-            }
-
-            @Override
-            public void onComplete() {
-                Log.e(TAG, "Completed");
-            }
-        });
     }
 }

@@ -9,5 +9,5 @@ public interface Constant {
     String POSTER_ORIGINAL_URL = "https://image.tmdb.org/t/p/original/";
 
     String ERROR_MESSAGE_INTERNET_NOT_AVAILABLE = "Internet is not available. \n Tap to retry.";
-    String SOMETHING_WENT_WRONG = "Something went wrong";
+    String SOMETHING_WENT_WRONG = "Something went wrong. \n Tap to retry.";
 }

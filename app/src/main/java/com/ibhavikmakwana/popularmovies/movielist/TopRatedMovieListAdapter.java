@@ -25,20 +25,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PopularMovieAdapter extends BaseRecyclerViewAdapter<PopularMovieAdapter.ViewHolder> {
-    private List<Movies.Result> mPopularMoviesList;
+public class TopRatedMovieListAdapter extends BaseRecyclerViewAdapter<TopRatedMovieListAdapter.ViewHolder> {
+    private List<Movies.Result> mMoviesList;
     private Context mContext;
 
-    PopularMovieAdapter(List<Movies.Result> popularMoviesList, Context context) {
-        super(popularMoviesList);
-        mPopularMoviesList = popularMoviesList;
+    TopRatedMovieListAdapter(List<Movies.Result> moviesList, Context context) {
+        super(moviesList);
+        mMoviesList = moviesList;
         mContext = context;
     }
 
     @SuppressLint({"SetTextI18n", "CheckResult"})
     @Override
     public void bindView(ViewHolder holder, int position) {
-        Movies.Result movies = mPopularMoviesList.get(position);
+        Movies.Result movies = mMoviesList.get(position);
         holder.mTvMovieName.setText(movies.getOriginalTitle());
         holder.mRbMovieRating.setRating((float) (movies.getVoteAverage() / 2));
 
@@ -55,11 +55,11 @@ public class PopularMovieAdapter extends BaseRecyclerViewAdapter<PopularMovieAda
     }
 
     private Movies.Result getItem(int position) {
-        return mPopularMoviesList.get(position);
+        return mMoviesList.get(position);
     }
 
     public void setMovies(List<Movies.Result> popularMovies) {
-        mPopularMoviesList = popularMovies;
+        mMoviesList = popularMovies;
         notifyDataSetChanged();
     }
 

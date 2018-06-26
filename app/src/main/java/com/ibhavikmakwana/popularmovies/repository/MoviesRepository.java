@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.ibhavikmakwana.popularmovies.model.Detail;
 import com.ibhavikmakwana.popularmovies.model.Movies;
+import com.ibhavikmakwana.popularmovies.model.Video;
 import com.ibhavikmakwana.popularmovies.network.APIService;
 
 import io.reactivex.Observable;
@@ -35,6 +36,10 @@ public class MoviesRepository {
         return Observable.concatArray(getMovieDetailFromApi(apiKey, id));
     }
 
+    public Observable<Video> getMoviesVideos(String apiKey, int id) {
+        return Observable.concatArray(getMovieVideoFromApi(apiKey, id));
+    }
+
     private Observable<Movies> getPopularMoviesFromApi(String apiKey, int page) {
         return mAPIService.getPopularMovies(apiKey, page).doOnNext(new Consumer<Movies>() {
             @Override
@@ -55,10 +60,19 @@ public class MoviesRepository {
 
 
     private Observable<Detail> getMovieDetailFromApi(String apiKey, int id) {
-        return mAPIService.getMovieDetail(id,apiKey).doOnNext(new Consumer<Detail>() {
+        return mAPIService.getMovieDetail(id, apiKey).doOnNext(new Consumer<Detail>() {
             @Override
             public void accept(Detail detail) {
                 Log.d("Success", "Dispatching " + detail + "characters from API...");
+            }
+        });
+    }
+
+    private Observable<Video> getMovieVideoFromApi(String apiKey, int id) {
+        return mAPIService.getMovieVideos(id, apiKey).doOnNext(new Consumer<Video>() {
+            @Override
+            public void accept(Video video) {
+                Log.d("Success", "Dispatching " + video + "characters from API...");
             }
         });
     }

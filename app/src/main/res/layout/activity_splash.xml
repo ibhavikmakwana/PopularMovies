@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     app:rb_color="#2798FF"
     app:rb_duration="5000"
     app:rb_radius="32dp"
@@ -14,12 +14,11 @@
     tools:context=".SplashActivity">
 
     <ImageView
-        android:id="@+id/centerImage"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="@dimen/splash_image_height_width"
+        android:layout_height="@dimen/splash_image_height_width"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="@dimen/spacing_xs_large"
+        android:layout_marginTop="@dimen/spacing_xs_large"
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher"/>
 </com.ibhavikmakwana.popularmovies.base.RippleBackground>

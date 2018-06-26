@@ -2,6 +2,7 @@ package com.ibhavikmakwana.popularmovies.network;
 
 import com.ibhavikmakwana.popularmovies.model.Detail;
 import com.ibhavikmakwana.popularmovies.model.Movies;
+import com.ibhavikmakwana.popularmovies.model.Video;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -24,4 +25,9 @@ public interface APIService {
     @GET("movie/{movie_id}")
     Observable<Detail> getMovieDetail(@Path("movie_id") int movieId,
                                       @Query("api_key") String apiKey);
+
+
+    @GET("movie/{movie_id}/videos")
+    Observable<Video> getMovieVideos(@Path("movie_id") int movieId,
+                                     @Query("api_key") String apiKey);
 }

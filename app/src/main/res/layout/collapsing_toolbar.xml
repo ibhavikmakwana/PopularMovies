@@ -2,7 +2,7 @@
 <com.ibhavikmakwana.popularmovies.base.CollapsibleConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar_layout"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -10,17 +10,31 @@
     android:minHeight="?attr/actionBarSize"
     app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/collapsing_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="2dp"
+        android:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@color/text_default"
+        tools:ignore="Overdraw,UnusedAttribute"/>
+
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iv_movie_image"
-        android:transitionName="@string/poster_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
+        android:transitionName="@string/poster_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.0"
+        tools:src="@tools:sample/backgrounds/scenic"/>
 
 </com.ibhavikmakwana.popularmovies.base.CollapsibleConstraintLayout>

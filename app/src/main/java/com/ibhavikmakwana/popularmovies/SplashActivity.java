@@ -25,6 +25,6 @@ public class SplashActivity extends BaseActivity {
                 finish();
             }
 
-        }, 6000); // wait for 5 seconds
+        }, 5000); // wait for 5 seconds
     }
 }
