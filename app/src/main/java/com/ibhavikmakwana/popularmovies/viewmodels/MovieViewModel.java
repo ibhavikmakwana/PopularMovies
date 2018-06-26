@@ -13,7 +13,7 @@ import io.reactivex.Observable;
  * Created by Bhavik Makwana on 30-05-2018.
  */
 public class MovieViewModel extends ViewModel {
-    MoviesRepository mMoviesRepository;
+    private MoviesRepository mMoviesRepository;
 
     public MovieViewModel(MoviesRepository moviesRepository) {
         this.mMoviesRepository = moviesRepository;

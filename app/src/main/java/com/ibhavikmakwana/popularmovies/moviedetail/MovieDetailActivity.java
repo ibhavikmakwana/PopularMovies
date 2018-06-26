@@ -119,7 +119,7 @@ public class MovieDetailActivity extends BaseActivity implements View.OnClickLis
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
             finish();
         }
-        MoviesRepository moviesRepository = new MoviesRepository(RetrofitHelper.create(), mContext);
+        MoviesRepository moviesRepository = new MoviesRepository(RetrofitHelper.create());
         mMovieDetailViewModel = new MovieDetailViewModel(moviesRepository);
         requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.placeholder);

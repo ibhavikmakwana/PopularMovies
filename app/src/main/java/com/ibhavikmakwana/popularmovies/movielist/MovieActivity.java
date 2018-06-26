@@ -116,7 +116,7 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
         mContext = MovieActivity.this;
         setToolbar(R.id.toolbar, getResources().getString(R.string.app_name), false);
         mToolbar.setOverflowIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_sort_24dp));
-        mMoviesRepository = new MoviesRepository(RetrofitHelper.create(), mContext);
+        mMoviesRepository = new MoviesRepository(RetrofitHelper.create());
         setUpPopularMovie();
         getPopularMovies(getResources().getString(R.string.api_key), popularPage);
         mCcError.setOnClickListener(this);

@@ -1,6 +1,5 @@
 package com.ibhavikmakwana.popularmovies.repository;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.ibhavikmakwana.popularmovies.model.Detail;
@@ -16,12 +15,10 @@ import io.reactivex.functions.Consumer;
  */
 @SuppressWarnings("unchecked")
 public class MoviesRepository {
-    private Context mContext;
     private APIService mAPIService;
 
-    public MoviesRepository(APIService apiService, Context context) {
+    public MoviesRepository(APIService apiService) {
         this.mAPIService = apiService;
-        this.mContext = context;
     }
 
     public Observable<Movies> getPopularMovies(String apiKey, int page) {
