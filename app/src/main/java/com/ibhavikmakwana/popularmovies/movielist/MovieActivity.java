@@ -272,16 +272,20 @@ public class MovieActivity extends BaseActivity implements View.OnClickListener 
     private void sortAndReloadMovieList() {
         if (isPopular) {
             if (mPopularMoviesList.size() > 0) {
+                mPopularMovieListAdapter.setMovies(mPopularMoviesList);
                 mRvMovies.setAdapter(mPopularMovieListAdapter);
                 mViewFlipper.setDisplayedChild(1);
             } else {
+                mRvMovies.setAdapter(mPopularMovieListAdapter);
                 getPopularMovies(getResources().getString(R.string.api_key), popularPage);
             }
         } else {
             if (mTopMoviesList.size() > 0) {
+                mTopRatedMovieListAdapter.setMovies(mTopMoviesList);
                 mRvMovies.setAdapter(mTopRatedMovieListAdapter);
                 mViewFlipper.setDisplayedChild(1);
             } else {
+                mRvMovies.setAdapter(mTopRatedMovieListAdapter);
                 getTopRatedMovies(getResources().getString(R.string.api_key), topRatedPage);
             }
         }
