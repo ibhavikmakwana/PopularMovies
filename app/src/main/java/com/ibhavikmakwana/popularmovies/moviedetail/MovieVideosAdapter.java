@@ -47,6 +47,7 @@ public class MovieVideosAdapter extends BaseRecyclerViewAdapter<MovieVideosAdapt
                     public void onReady() {
                         super.onReady();
                         youTubePlayer.loadVideo(key, 0);
+                        youTubePlayer.pause();
                     }
                 });
             }

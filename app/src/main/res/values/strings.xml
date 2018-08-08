@@ -6,4 +6,6 @@
     <string name="text_released_on">Released on</string>
     <string name="text_overview">Overview</string>
     <string name="text_videos">Videos</string>
+    <string name="text_reviews">Reviews</string>
+    <string name="text_view_reviews">View Reviews</string>
 </resources>
